@@ -1,0 +1,9 @@
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\KSISLaba2.csprojAssemblyReference.cache
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.frmMain.resources
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\KSISLaba2.csproj.GenerateResource.cache
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\evgeny\Desktop\КСИС\чат\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb

@@ -1,0 +1,9 @@
+E:\4 сем\КСИС\чат\ChatClient\bin\Release\ChatClient.exe.config
+E:\4 сем\КСИС\чат\ChatClient\bin\Release\ChatClient.exe
+E:\4 сем\КСИС\чат\ChatClient\bin\Release\ChatClient.pdb
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\KSISLaba2Client.csprojAssemblyReference.cache
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\WindowsFormsApp1.frmMain.resources
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\Chat.Properties.Resources.resources
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\KSISLaba2Client.csproj.GenerateResource.cache
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\ChatClient.exe
+E:\4 сем\КСИС\чат\ChatClient\obj\Release\ChatClient.pdb

@@ -1,0 +1,7 @@
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\NetNodeInfo.deps.json
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\NetNodeInfo.dll
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\NetNodeInfo.pdb
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\NetNodeInfo.AssemblyInfoInputs.cache
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\NetNodeInfo.AssemblyInfo.cs
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\NetNodeInfo.dll
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\NetNodeInfo.pdb
