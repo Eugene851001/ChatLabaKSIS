@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSISLaba2Client", "KSISLaba2Client.csproj", "{129E6BFC-F1A0-498F-BA59-59755704E933}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetNodeInfo", "..\Common\NetNodeInfo\NetNodeInfo.csproj", "{2341EE30-E58C-497B-821C-B93DA521C787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat", "..\Common\NetNodeInfo\Chat.csproj", "{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{129E6BFC-F1A0-498F-BA59-59755704E933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{129E6BFC-F1A0-498F-BA59-59755704E933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{129E6BFC-F1A0-498F-BA59-59755704E933}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2341EE30-E58C-497B-821C-B93DA521C787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2341EE30-E58C-497B-821C-B93DA521C787}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2341EE30-E58C-497B-821C-B93DA521C787}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2341EE30-E58C-497B-821C-B93DA521C787}.Release|Any CPU.Build.0 = Release|Any CPU
+		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

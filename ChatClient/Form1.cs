@@ -11,7 +11,7 @@ using System.Net;
 using Chat;
 using System.Threading;
 
-namespace WindowsFormsApp1
+namespace ChatClient
 {
     public partial class frmMain : Form
     {

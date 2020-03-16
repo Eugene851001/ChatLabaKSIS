@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
-using System.Xml.Serialization;
 using Chat;
 using System.Threading;
 
@@ -17,13 +16,14 @@ namespace Server
         public delegate void DisconnectClient();
         public event DisconnectClient EventDisconnectClient;
         public string Name;
-
+        Serializer messageSerializer;
         Socket socketClientHandler;
         Thread threadHandleClient;
         public bool IsConnected;
         public ConnectionHandler(Socket socketClientHandler)
         {
             Name = "";
+            messageSerializer = new Serializer();
             IsConnected = true;
             EventDisconnectClient += RemoveClient;
             EventDisconnectClient += NotifyClientLeft;
@@ -151,9 +151,8 @@ namespace Server
                         amount = socketClientHandler.Receive(data);
                         messageContainer.Write(data, 0, amount);
                     } while (socketClientHandler.Available > 0);
-                    XmlSerializer serializer = new XmlSerializer(typeof(Message));
-                    messageContainer.Position = 0;
-                    Message recievedMessage = (Message)serializer.Deserialize(messageContainer);
+                    Message recievedMessage = messageSerializer.Deserialize(messageContainer.GetBuffer(),
+                        messageContainer.GetBuffer().Length);
                     HandleMessage(recievedMessage);
                 }
                 catch

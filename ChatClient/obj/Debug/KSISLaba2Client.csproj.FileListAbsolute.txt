@@ -19,7 +19,6 @@ C:\Users\evgeny\Desktop\КСИС\чат\ChatClient\obj\Debug\ChatClient.pdb
 E:\4 сем\КСИС\чат\ChatClient\bin\Debug\ChatClient.exe.config
 E:\4 сем\КСИС\чат\ChatClient\bin\Debug\ChatClient.exe
 E:\4 сем\КСИС\чат\ChatClient\obj\Debug\KSISLaba2Client.csprojAssemblyReference.cache
-E:\4 сем\КСИС\чат\ChatClient\obj\Debug\WindowsFormsApp1.frmMain.resources
 E:\4 сем\КСИС\чат\ChatClient\obj\Debug\Chat.Properties.Resources.resources
 E:\4 сем\КСИС\чат\ChatClient\obj\Debug\KSISLaba2Client.csproj.GenerateResource.cache
 E:\4 сем\КСИС\чат\ChatClient\obj\Debug\ChatClient.exe
@@ -122,6 +121,7 @@ E:\4 сем\КСИС\чат\ChatClient\bin\Debug\System.Xml.XmlDocument.dll
 E:\4 сем\КСИС\чат\ChatClient\bin\Debug\System.Xml.XmlSerializer.dll
 E:\4 сем\КСИС\чат\ChatClient\bin\Debug\System.Xml.XPath.dll
 E:\4 сем\КСИС\чат\ChatClient\bin\Debug\System.Xml.XPath.XDocument.dll
-E:\4 сем\КСИС\чат\ChatClient\bin\Debug\NetNodeInfo.dll
-E:\4 сем\КСИС\чат\ChatClient\bin\Debug\NetNodeInfo.pdb
 E:\4 сем\КСИС\чат\ChatClient\obj\Debug\KSISLaba2Client.csproj.CopyComplete
+E:\4 сем\КСИС\чат\ChatClient\obj\Debug\ChatClient.frmMain.resources
+E:\4 сем\КСИС\чат\ChatClient\bin\Debug\Chat.dll
+E:\4 сем\КСИС\чат\ChatClient\bin\Debug\Chat.pdb

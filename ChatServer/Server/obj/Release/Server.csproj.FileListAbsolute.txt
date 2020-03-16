@@ -100,7 +100,7 @@ E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\System.Xml.XmlDocument
 E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\System.Xml.XmlSerializer.dll
 E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\System.Xml.XPath.dll
 E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\System.Xml.XPath.XDocument.dll
-E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\NetNodeInfo.dll
-E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\NetNodeInfo.pdb
 E:\4 сем\КСИС\чат\ChatServer\Server\obj\Release\Server.exe.config
 E:\4 сем\КСИС\чат\ChatServer\Server\obj\Release\Server.csproj.CopyComplete
+E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\Chat.dll
+E:\4 сем\КСИС\чат\ChatServer\Server\bin\Release\Chat.pdb

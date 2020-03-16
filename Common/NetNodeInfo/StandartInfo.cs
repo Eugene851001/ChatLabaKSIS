@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.NetworkInformation;
 
 namespace NetNodeInfo
 {
@@ -19,6 +20,19 @@ namespace NetNodeInfo
                 }
             }
             return currentIPAdress;
+        }
+
+        public static IPAddress GetIPv4Mask()
+        {
+            IPAddress result = null;
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            foreach(NetworkInterface adapter in adapters)
+            {
+                IPInterfaceProperties adapterPropeties = adapter.GetIPProperties();
+                UnicastIPAddressInformationCollection unicast = adapterPropeties.UnicastAddresses;
+                result = unicast[0].IPv4Mask;
+            }
+            return result;
         }
     }
 }

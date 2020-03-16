@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Chat
 {
-    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest, SearchResponse, History};
+    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest, SearchResponse, History };
 
     public struct EndPointNamePair
     {
@@ -67,7 +67,7 @@ namespace Chat
         public Message(string data, MessageType messageType)
         {
             this.messageType = messageType;
-            switch(messageType)
+            switch (messageType)
             {
                 case MessageType.Regular:
                     Content = data;

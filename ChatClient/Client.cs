@@ -11,14 +11,15 @@ using Chat;
 using System.Threading;
 using NetNodeInfo;
 
-namespace WindowsFormsApp1
+namespace ChatClient
 {
     public class Client
     {
-        const string ServerIP = "192.168.48.255";
+        const string BroadcastIP = "192.168.48.255";
         const int ServerPort = 8005;
         Socket socketServerHandler;
         Socket socketUdpHandler;
+        Serializer messageSerializer;
         public bool IsConnected = false;
         List<Thread> threads;
 
@@ -26,6 +27,7 @@ namespace WindowsFormsApp1
         public event MessageHandler ReceiveMessageHandler;
         public Client()
         {
+            messageSerializer = new Serializer();
             SetUdpEndPoint();
             socketServerHandler = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             threads = new List<Thread>();
@@ -94,9 +96,8 @@ namespace WindowsFormsApp1
                         amount = socketServerHandler.Receive(data);
                         messageContainer.Write(data, 0, amount);
                     } while (socketServerHandler.Available > 0);
-                    XmlSerializer serializer = new XmlSerializer(typeof(Message));
-                    messageContainer.Position = 0;
-                    Message recievedMessage = (Message)serializer.Deserialize(messageContainer);
+                    Message recievedMessage = messageSerializer.Deserialize(messageContainer.GetBuffer(),
+                        messageContainer.GetBuffer().Length);
                     OnMessageReceive(recievedMessage);
                 }
                 catch
@@ -121,11 +122,7 @@ namespace WindowsFormsApp1
             while (true)
             {
                 int amount = socketUdpHandler.ReceiveFrom(data, ref endPoint);
-                MemoryStream messageContainer = new MemoryStream();
-                messageContainer.Write(data, 0, amount);
-                XmlSerializer serializer = new XmlSerializer(typeof(Message));
-                messageContainer.Position = 0;
-                Message message = (Message)serializer.Deserialize(messageContainer);
+                Message message = messageSerializer.Deserialize(data, amount);
                 if (message.messageType == MessageType.SearchResponse)
                 {
                     OnMessageReceive(message);
@@ -139,14 +136,11 @@ namespace WindowsFormsApp1
         public void UdpBroadcastRequest()
         {
             Message message = new Message(MessageType.SearchRequest);
-            Socket sendRequest = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             message.Port = ((IPEndPoint)socketUdpHandler.LocalEndPoint).Port;
-            message.IPAdress = NetNodeInfo.StandartInfo.GetCurrentIP().ToString();
-            IPEndPoint IPendPoint = new IPEndPoint(IPAddress.Parse(ServerIP), ServerPort);           
-            XmlSerializer serializer = new XmlSerializer(typeof(Message));
-            MemoryStream messageContainer = new MemoryStream();
-            serializer.Serialize(messageContainer, message);
-            sendRequest.SendTo(messageContainer.GetBuffer(),  IPendPoint);
+            message.IPAdress = StandartInfo.GetCurrentIP().ToString();
+            IPEndPoint IPendPoint = new IPEndPoint(IPAddress.Parse(BroadcastIP), ServerPort);
+            Socket sendRequest = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            sendRequest.SendTo(messageSerializer.Serialize(message),  IPendPoint);
             Thread threadReceiveUdp = new Thread(ReceiveMessagesUdp);
             threads.Add(threadReceiveUdp);
             threadReceiveUdp.Start();
@@ -154,11 +148,15 @@ namespace WindowsFormsApp1
 
         public bool SendMessage(Message message)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Message));
-            MemoryStream messageContainer = new MemoryStream();
-            serializer.Serialize(messageContainer, message);
-            byte[] buffer = messageContainer.GetBuffer();
-            socketServerHandler.Send(buffer);
+            byte[] buffer = messageSerializer.Serialize(message);
+            try
+            {
+                socketServerHandler.Send(buffer);
+            }
+            catch
+            {
+                Disconnect();
+            }
             return true;
         }
 

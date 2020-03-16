@@ -46,9 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ChatServer\Server\Message.cs">
-      <Link>Message.cs</Link>
-    </Compile>
     <Compile Include="ChatDialogInfo.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Form1.cs">
@@ -86,9 +83,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\NetNodeInfo\NetNodeInfo.csproj">
-      <Project>{2341ee30-e58c-497b-821c-b93da521c787}</Project>
-      <Name>NetNodeInfo</Name>
+    <ProjectReference Include="..\Common\NetNodeInfo\Chat.csproj">
+      <Project>{025ea9b1-37b6-42e3-8b93-b3fa43cff0fd}</Project>
+      <Name>Chat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,8 @@
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\Chat.deps.json
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\Chat.dll
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\bin\Debug\netstandard2.0\Chat.pdb
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\Chat.csprojAssemblyReference.cache
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\Chat.AssemblyInfoInputs.cache
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\Chat.AssemblyInfo.cs
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\Chat.dll
+E:\4 сем\КСИС\чат\Common\NetNodeInfo\obj\Debug\netstandard2.0\Chat.pdb

@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using Chat;
-using System.Xml.Serialization;
 using System.Collections;
 using System.Threading;
 using NetNodeInfo;
@@ -25,16 +24,13 @@ namespace Server
         public static Dictionary<int, string> clientNames = new Dictionary<int, string>();
         public static List<string> MessageHistory = new List<string>();
 
-       public static void HandleSearchMessage(Message message, Socket socketListener)
+        static Serializer messageSerializer = new Serializer();
+       public static void HandleSearchMessage(Message message)
         {
             Message messageResponse = new Message(StandartInfo.GetCurrentIP().ToString(), port, MessageType.SearchResponse);
             Socket socketSetAdress = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(message.IPAdress), message.Port);
-            XmlSerializer serializer = new XmlSerializer(typeof(Message));
-            MemoryStream messageContainer = new MemoryStream();
-            serializer.Serialize(messageContainer, messageResponse);
-            byte[] data = messageContainer.GetBuffer();
-            socketSetAdress.SendTo(data, endPoint); 
+            socketSetAdress.SendTo(messageSerializer.Serialize(messageResponse), endPoint); 
        }
         public static void ListenUdpBroadcast()
         {
@@ -47,14 +43,9 @@ namespace Server
             while (true)
             {
                 int amount = socketListener.ReceiveFrom(data, ref endPoint);
-                int testPort = ((IPEndPoint)(socketListener.LocalEndPoint)).Port;
-                MemoryStream messageContainer = new MemoryStream();
-                messageContainer.Write(data, 0, amount);
-                XmlSerializer serializer = new XmlSerializer(typeof(Message));
-                messageContainer.Position = 0;
-                Message message = (Message)serializer.Deserialize(messageContainer);
+                Message message = messageSerializer.Deserialize(data, amount);
                 if (message.messageType == MessageType.SearchRequest)
-                    HandleSearchMessage(message, socketListener);
+                    HandleSearchMessage(message);
             }
         }
 
@@ -83,11 +74,7 @@ namespace Server
 
         public static void SendMessage(Message message, Socket socketClient)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Message));
-            MemoryStream messageContainer = new MemoryStream();
-            serializer.Serialize(messageContainer, message);
-            byte[] buffer = messageContainer.GetBuffer();
-            socketClient.Send(buffer);
+            socketClient.Send(messageSerializer.Serialize(message));
         }
 
         public static void RemoveClient(int key)
