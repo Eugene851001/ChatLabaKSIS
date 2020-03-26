@@ -81,6 +81,7 @@ namespace ChatClient
             else
                 return false;
         }
+
         public void ReceiveMessages()
         {
             byte[] data = new byte[1024];
@@ -102,7 +103,8 @@ namespace ChatClient
                 }
                 catch
                 {
-
+                    Disconnect();
+                    return;
                 }
             } while (IsConnected);
         }
