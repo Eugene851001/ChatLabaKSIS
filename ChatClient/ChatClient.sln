@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSISLaba2Client", "KSISLaba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat", "..\Common\NetNodeInfo\Chat.csproj", "{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClient", "..\HttpClient\HttpClient.csproj", "{9F23158C-595C-48E0-8378-77B603CD9EE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{025EA9B1-37B6-42E3-8B93-B3FA43CFF0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F23158C-595C-48E0-8378-77B603CD9EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F23158C-595C-48E0-8378-77B603CD9EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F23158C-595C-48E0-8378-77B603CD9EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F23158C-595C-48E0-8378-77B603CD9EE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

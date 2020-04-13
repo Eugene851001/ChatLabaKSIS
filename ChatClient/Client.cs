@@ -71,7 +71,7 @@ namespace ChatClient
         {
             if (Connect(endPoint))
             {
-                SendMessage(new Chat.Message(name, MessageType.Registration));
+                SendMessage(new Chat.Message() {Name = name, messageType = MessageType.Registration});
 
                 Thread threadServerConnection = new Thread(ReceiveMessages);
                 threads.Add(threadServerConnection);
@@ -81,7 +81,6 @@ namespace ChatClient
             else
                 return false;
         }
-
         public void ReceiveMessages()
         {
             byte[] data = new byte[1024];

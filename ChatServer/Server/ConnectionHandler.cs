@@ -22,7 +22,8 @@ namespace Server
         public bool IsConnected;
         public ConnectionHandler(Socket socketClientHandler)
         {
-            Name = "";
+            Console.WriteLine("GetSomething");
+           /* Name = "";
             messageSerializer = new Serializer();
             IsConnected = true;
             EventDisconnectClient += RemoveClient;
@@ -32,7 +33,7 @@ namespace Server
             socketClientHandler.SendTimeout = 1000;
             Server.clients.Add(socketClientHandler.RemoteEndPoint.GetHashCode(), socketClientHandler);
             threadHandleClient = new Thread(HandleClient);
-            threadHandleClient.Start();
+            threadHandleClient.Start();*/
         }
 
         public void RemoveClient()
@@ -44,6 +45,7 @@ namespace Server
 
         public void NotifyClientLeft()
         {
+            Server.SendToAll(new Message("has left the chat"));
             List<EndPointNamePair> info = GetClientsList();
             Server.SendToAll(new Message(info));
         }
@@ -57,7 +59,8 @@ namespace Server
             bool IsConnected = true;
             try
             {
-                socketClientHandler.Send(new byte[] { 1, 2, 3 });
+
+                socketClientHandler.Send(messageSerializer.Serialize(new Message(MessageType.CheckConnection)));
                 if (!socketClientHandler.Connected)
                     IsConnected = false;
             }
@@ -93,7 +96,8 @@ namespace Server
                        + " : " + message.Content);
             message.Name = Server.clientNames[socketClientHandler.RemoteEndPoint.GetHashCode()];
             Server.SendToAll(message);
-            Server.MessageHistory.Add(message.Name + ": " + message.Content);
+            Server.MessageHistory.Add(message.Name + ": "
+                        + message.Content + "\n" + message.Time + "\n" + message.IPAdress);
         }
 
         void HandlePrivateMessage(Message message)
@@ -139,7 +143,7 @@ namespace Server
         public void ReceiveMessages()
         {
             byte[] data = new byte[1024];
-            StringBuilder receivedData = new StringBuilder();
+      //      StringBuilder receivedData = new StringBuilder();
             int amount;
             do
             {
@@ -174,10 +178,6 @@ namespace Server
         }
         public void HandleClient()
         {
-            /*   Thread threadListenTcp = new Thread(ReceiveMessages);
-               Thread threadCheckConnection = new Thread(CheckClient);
-               threadListenTcp.Start();
-               threadCheckConnection.Start();*/
             ReceiveMessages();
             OnDisconnectClient();
         }

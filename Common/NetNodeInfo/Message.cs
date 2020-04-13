@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Chat
 {
-    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest, SearchResponse, History };
+    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest, SearchResponse, History, CheckConnection};
 
     public struct EndPointNamePair
     {
@@ -33,6 +33,7 @@ namespace Chat
         public int Hash;
         public List<string> MessageHistory;
         public DateTime Time;
+        public List<string> FileNames;
 
         public Message(int receiver, string content)
         {
@@ -64,21 +65,7 @@ namespace Chat
             this.Port = port;
             this.IPAdress = IPAdress;
         }
-        public Message(string data, MessageType messageType)
-        {
-            this.messageType = messageType;
-            switch (messageType)
-            {
-                case MessageType.Regular:
-                    Content = data;
-                    Name = "";
-                    break;
-                case MessageType.Registration:
-                    Content = "";
-                    Name = data;
-                    break;
-            }
-        }
+
         public Message(string content)
         {
             messageType = MessageType.Regular;
@@ -88,8 +75,6 @@ namespace Chat
 
         public Message()
         {
-            Content = "No content for today";
-            Name = "Unknown";
         }
     }
 }

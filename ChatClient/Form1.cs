@@ -10,30 +10,37 @@ using System.Windows.Forms;
 using System.Net;
 using Chat;
 using System.Threading;
+using System.IO;
 
 namespace ChatClient
 {
     public partial class frmMain : Form
     {
         const int chatDialogId = 0;
+        const int httpPort = 8009;
 
+        ClientHttp.Client clientHttp;
         Client client;
         Dictionary<int, ChatDialogInfo> chatDialogsInfo;
         List<EndPointNamePair> clientsList;
+        List<string> fileNames;
         int CurrentDialogId = chatDialogId;
         int selectedIndex = 0;
+        bool IsLoadingFiles = false;
         public frmMain()
         {
             InitializeComponent();
             clientsList = new List<EndPointNamePair>();
             clientsList.Add(new EndPointNamePair() { Key = chatDialogId, Value = "Chat" });
+            fileNames = new List<string>();
             chatDialogsInfo = new Dictionary<int, ChatDialogInfo>();
             chatDialogsInfo.Add(chatDialogId, new ChatDialogInfo("Chat"));
             client = new Client();
-            client.ReceiveMessageHandler += ShowReceivedMessages;
+            clientHttp = new ClientHttp.Client();
+            client.ReceiveMessageHandler += HandleReceivedMessages;
         }
 
-        public void ShowReceivedMessages(Chat.Message message)
+        public void HandleReceivedMessages(Chat.Message message)
         {
             switch(message.messageType)
             {
@@ -114,6 +121,11 @@ namespace ChatClient
                     lbParticipants.Items.Add(clientName.Value + " " + ((chatDialogsInfo[clientName.Key].UnreadMessageCounter != 0) ?
                         chatDialogsInfo[clientName.Key].UnreadMessageCounter.ToString() : ""));
                 }
+                lbFiles.Items.Clear();
+                foreach(string fileName in fileNames)
+                {
+                    lbFiles.Items.Add(fileName);
+                }
             };
             if (InvokeRequired)
                 Invoke(action);
@@ -134,16 +146,26 @@ namespace ChatClient
                 if (CurrentDialogId == chatDialogId)
                 {
                     message = new Chat.Message(tbMessageContent.Text);
+                    message.FileNames = new List<string>(fileNames);
                 }
                 else
                 {
                     message = new Chat.Message(clientsList[selectedIndex].Key, tbMessageContent.Text);
+                    message.FileNames = new List<string>(fileNames);
                     chatDialogsInfo[message.ReceiverID].Messages.Add("Me: " + message.Content);
                 }
                 if (cbIsConnected.Checked)
                 {
-                    client.SendMessage(message);
-                    UpdateView();
+                    if (IsLoadingFiles)
+                    {
+                        MessageBox.Show("Please wait for file loading", "Not ready",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        client.SendMessage(message);
+                        UpdateView();
+                    }
                 }
             }
         }
@@ -195,6 +217,25 @@ namespace ChatClient
             Chat.Message message = new Chat.Message(new List<string>(), clientsList[selectedIndex].Key);
             client.SendMessage(message);
             UpdateView();
+        }
+
+        async Task LoadFileContent(string fileName)
+        {
+            IsLoadingFiles = true;
+            await clientHttp.PostResource("http://localhost:" + httpPort.ToString(), clientHttp.LoadFile(fileName));
+            IsLoadingFiles = false;
+        }
+        private async void btAdd_Click(object sender, EventArgs e)
+        {
+            if (LoadFile.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = LoadFile.FileName;
+                Task t = LoadFileContent(fileName);
+                tbChatContent.Text += "Hello";
+                await t;
+                fileNames.Add(Path.GetFileName(fileName));
+                UpdateView();
+            }
         }
     }
 }

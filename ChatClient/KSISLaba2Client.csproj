@@ -87,6 +87,13 @@
       <Project>{025ea9b1-37b6-42e3-8b93-b3fa43cff0fd}</Project>
       <Name>Chat</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HttpClient\HttpClient.csproj">
+      <Project>{9f23158c-595c-48e0-8378-77b603cd9ee0}</Project>
+      <Name>HttpClient</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

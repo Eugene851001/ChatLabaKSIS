@@ -1,28 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "E:\\4 сем\\КСИС\\GIT\\Chat\\Common\\NetNodeInfo\\Chat.csproj": {}
+    "E:\\4 сем\\КСИС\\чат\\Common\\NetNodeInfo\\Chat.csproj": {}
   },
   "projects": {
-    "E:\\4 сем\\КСИС\\GIT\\Chat\\Common\\NetNodeInfo\\Chat.csproj": {
+    "E:\\4 сем\\КСИС\\чат\\Common\\NetNodeInfo\\Chat.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\4 сем\\КСИС\\GIT\\Chat\\Common\\NetNodeInfo\\Chat.csproj",
+        "projectUniqueName": "E:\\4 сем\\КСИС\\чат\\Common\\NetNodeInfo\\Chat.csproj",
         "projectName": "Chat",
-        "projectPath": "E:\\4 сем\\КСИС\\GIT\\Chat\\Common\\NetNodeInfo\\Chat.csproj",
+        "projectPath": "E:\\4 сем\\КСИС\\чат\\Common\\NetNodeInfo\\Chat.csproj",
         "packagesPath": "C:\\Users\\evgeny\\.nuget\\packages\\",
-        "outputPath": "E:\\4 сем\\КСИС\\GIT\\Chat\\Common\\NetNodeInfo\\obj\\",
+        "outputPath": "E:\\4 сем\\КСИС\\чат\\Common\\NetNodeInfo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\evgeny\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\evgeny\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

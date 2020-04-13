@@ -44,13 +44,18 @@
             this.btGetAddress = new System.Windows.Forms.Button();
             this.lbCurrentDialog = new System.Windows.Forms.Label();
             this.btGetHistory = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbFiles = new System.Windows.Forms.ListBox();
+            this.btAdd = new System.Windows.Forms.Button();
+            this.btRemove = new System.Windows.Forms.Button();
+            this.LoadFile = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // tbMessageContent
             // 
             this.tbMessageContent.Location = new System.Drawing.Point(95, 350);
             this.tbMessageContent.Name = "tbMessageContent";
-            this.tbMessageContent.Size = new System.Drawing.Size(256, 24);
+            this.tbMessageContent.Size = new System.Drawing.Size(176, 24);
             this.tbMessageContent.TabIndex = 0;
             this.tbMessageContent.Text = "";
             // 
@@ -98,7 +103,7 @@
             // 
             // btSendMessage
             // 
-            this.btSendMessage.Location = new System.Drawing.Point(95, 380);
+            this.btSendMessage.Location = new System.Drawing.Point(276, 350);
             this.btSendMessage.Name = "btSendMessage";
             this.btSendMessage.Size = new System.Drawing.Size(75, 23);
             this.btSendMessage.TabIndex = 6;
@@ -189,11 +194,56 @@
             this.btGetHistory.UseVisualStyleBackColor = true;
             this.btGetHistory.Click += new System.EventHandler(this.btGetHistory_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(92, 377);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 17);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Loaded files";
+            // 
+            // lbFiles
+            // 
+            this.lbFiles.FormattingEnabled = true;
+            this.lbFiles.ItemHeight = 16;
+            this.lbFiles.Location = new System.Drawing.Point(97, 403);
+            this.lbFiles.Name = "lbFiles";
+            this.lbFiles.Size = new System.Drawing.Size(174, 84);
+            this.lbFiles.TabIndex = 20;
+            // 
+            // btAdd
+            // 
+            this.btAdd.Location = new System.Drawing.Point(276, 403);
+            this.btAdd.Name = "btAdd";
+            this.btAdd.Size = new System.Drawing.Size(75, 23);
+            this.btAdd.TabIndex = 21;
+            this.btAdd.Text = "Add";
+            this.btAdd.UseVisualStyleBackColor = true;
+            this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
+            // 
+            // btRemove
+            // 
+            this.btRemove.Location = new System.Drawing.Point(276, 441);
+            this.btRemove.Name = "btRemove";
+            this.btRemove.Size = new System.Drawing.Size(75, 23);
+            this.btRemove.TabIndex = 22;
+            this.btRemove.Text = "Remove";
+            this.btRemove.UseVisualStyleBackColor = true;
+            // 
+            // LoadFile
+            // 
+            this.LoadFile.FileName = "openFileDialog1";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 491);
+            this.Controls.Add(this.btRemove);
+            this.Controls.Add(this.btAdd);
+            this.Controls.Add(this.lbFiles);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btGetHistory);
             this.Controls.Add(this.lbCurrentDialog);
             this.Controls.Add(this.btGetAddress);
@@ -237,6 +287,11 @@
         private System.Windows.Forms.Button btGetAddress;
         private System.Windows.Forms.Label lbCurrentDialog;
         private System.Windows.Forms.Button btGetHistory;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListBox lbFiles;
+        private System.Windows.Forms.Button btAdd;
+        private System.Windows.Forms.Button btRemove;
+        private System.Windows.Forms.OpenFileDialog LoadFile;
     }
 }
 
