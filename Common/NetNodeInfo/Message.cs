@@ -31,7 +31,7 @@ namespace Chat
         public string IPAdress;
         public int Port;
         public int Hash;
-        public List<string> MessageHistory;
+        public List<Message> MessageHistory;
         public DateTime Time;
         public List<string> FileNames;
 
@@ -42,7 +42,7 @@ namespace Chat
             messageType = MessageType.Private;
         }
 
-        public Message(List<string> messageHistory, int receiverID)
+        public Message(List<Message> messageHistory, int receiverID)
         {
             ReceiverID = receiverID;
             MessageHistory = messageHistory;

@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Chat
 {
     class ChatDialogInfo
     {
-        public List<string> Messages;
+        public List<Message> Messages;
         public int UnreadMessageCounter;
         public string Name;
 
         public ChatDialogInfo(string name)
         {
             Name = name;
-            Messages = new List<string>();
+            Messages = new List<Message>();
             UnreadMessageCounter = 0;
         }
-        public void AddMessage(string messageContent)
+        public void AddMessage(Message message)
         {
-            Messages.Add(messageContent);
+            Messages.Add(message);
             UnreadMessageCounter++;
         }
     }

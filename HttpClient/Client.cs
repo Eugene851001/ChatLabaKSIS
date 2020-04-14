@@ -63,13 +63,21 @@ namespace ClientHttp
         }
         
 
-        async public Task<string> GetResource(string uri)
+        async public Task<byte[]> GetResource(string uri)
         {
-            string result = "";
+            byte[] result = null;
             HttpResponseMessage response = await client.GetAsync(uri);
-            if(response.StatusCode  == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                result = await response.Content.ReadAsStringAsync();
+                result = await response.Content.ReadAsByteArrayAsync();
+            }
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    result = Encoding.ASCII.GetBytes("Not found");
+                }
+               
             }
             return result;
         }

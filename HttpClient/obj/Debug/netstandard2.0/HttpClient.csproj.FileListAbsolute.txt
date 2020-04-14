@@ -6,3 +6,11 @@ E:\4 сем\КСИС\чат\HttpClient\obj\Debug\netstandard2.0\HttpClient.Assem
 E:\4 сем\КСИС\чат\HttpClient\obj\Debug\netstandard2.0\HttpClient.dll
 E:\4 сем\КСИС\чат\HttpClient\obj\Debug\netstandard2.0\HttpClient.pdb
 E:\4 сем\КСИС\чат\HttpClient\obj\Debug\netstandard2.0\HttpClient.csprojAssemblyReference.cache
+E:\4 сем\КСИС\GIT\Chat\HttpClient\bin\Debug\netstandard2.0\HttpClient.deps.json
+E:\4 сем\КСИС\GIT\Chat\HttpClient\bin\Debug\netstandard2.0\HttpClient.dll
+E:\4 сем\КСИС\GIT\Chat\HttpClient\bin\Debug\netstandard2.0\HttpClient.pdb
+E:\4 сем\КСИС\GIT\Chat\HttpClient\obj\Debug\netstandard2.0\HttpClient.AssemblyInfoInputs.cache
+E:\4 сем\КСИС\GIT\Chat\HttpClient\obj\Debug\netstandard2.0\HttpClient.AssemblyInfo.cs
+E:\4 сем\КСИС\GIT\Chat\HttpClient\obj\Debug\netstandard2.0\HttpClient.dll
+E:\4 сем\КСИС\GIT\Chat\HttpClient\obj\Debug\netstandard2.0\HttpClient.pdb
+E:\4 сем\КСИС\GIT\Chat\HttpClient\obj\Debug\netstandard2.0\HttpClient.csprojAssemblyReference.cache

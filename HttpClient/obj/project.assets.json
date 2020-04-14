@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\4 сем\\КСИС\\чат\\HttpClient\\HttpClient.csproj",
+      "projectUniqueName": "E:\\4 сем\\КСИС\\GIT\\Chat\\HttpClient\\HttpClient.csproj",
       "projectName": "HttpClient",
-      "projectPath": "E:\\4 сем\\КСИС\\чат\\HttpClient\\HttpClient.csproj",
+      "projectPath": "E:\\4 сем\\КСИС\\GIT\\Chat\\HttpClient\\HttpClient.csproj",
       "packagesPath": "C:\\Users\\evgeny\\.nuget\\packages\\",
-      "outputPath": "E:\\4 сем\\КСИС\\чат\\HttpClient\\obj\\",
+      "outputPath": "E:\\4 сем\\КСИС\\GIT\\Chat\\HttpClient\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

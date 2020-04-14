@@ -85,9 +85,43 @@ namespace ServerHttp
             Console.WriteLine((int)context.Request.ContentLength64);
         }
 
+        byte[] GetFileContent(string fileName)
+        {
+            byte[] buffer = null;
+            FileStream fin;
+            try
+            {
+                fin = new FileStream(fileName, FileMode.Open);
+            }
+            catch
+            {
+                return null;
+            }
+            try
+            {
+                buffer = new byte[fin.Length];
+                fin.Read(buffer, 0, (int)fin.Length);
+            }
+            catch
+            {
+                buffer = null;
+            }
+            finally
+            {
+                fin.Close();
+            }
+            return buffer;
+        }
+
         void HandleGetRequest(HttpListenerContext context)
         {
             context.Response.StatusCode = (int)HttpStatusCode.OK;
+            Console.WriteLine(context.Request.Url.LocalPath);
+            byte[] buffer = GetFileContent(Path.GetFileName(context.Request.Url.LocalPath));
+            if (buffer != null)
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+            else
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
             context.Response.OutputStream.Close();
             Console.WriteLine("Handle get");
         }
@@ -112,7 +146,7 @@ namespace ServerHttp
             listener.Start();
             IsListening = true;
             while(IsListening)
-            {
+            { 
                 try
                 {
                     HttpListenerContext context = listener.GetContext();

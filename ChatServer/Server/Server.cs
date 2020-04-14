@@ -22,7 +22,7 @@ namespace Server
 
         public static Dictionary<int, Socket> clients = new Dictionary<int, Socket>();
         public static Dictionary<int, string> clientNames = new Dictionary<int, string>();
-        public static List<string> MessageHistory = new List<string>();
+        public static List<Message> MessageHistory = new List<Message>();
 
         static Serializer messageSerializer = new Serializer();
        public static void HandleSearchMessage(Message message)

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
@@ -22,8 +19,8 @@ namespace Server
         public bool IsConnected;
         public ConnectionHandler(Socket socketClientHandler)
         {
-            Console.WriteLine("GetSomething");
-           /* Name = "";
+            //Console.WriteLine("GetSomething");
+            Name = "";
             messageSerializer = new Serializer();
             IsConnected = true;
             EventDisconnectClient += RemoveClient;
@@ -33,7 +30,7 @@ namespace Server
             socketClientHandler.SendTimeout = 1000;
             Server.clients.Add(socketClientHandler.RemoteEndPoint.GetHashCode(), socketClientHandler);
             threadHandleClient = new Thread(HandleClient);
-            threadHandleClient.Start();*/
+            threadHandleClient.Start();
         }
 
         public void RemoveClient()
@@ -96,8 +93,7 @@ namespace Server
                        + " : " + message.Content);
             message.Name = Server.clientNames[socketClientHandler.RemoteEndPoint.GetHashCode()];
             Server.SendToAll(message);
-            Server.MessageHistory.Add(message.Name + ": "
-                        + message.Content + "\n" + message.Time + "\n" + message.IPAdress);
+            Server.MessageHistory.Add(message);
         }
 
         void HandlePrivateMessage(Message message)
@@ -115,7 +111,8 @@ namespace Server
 
         void HandleHistoryRequest(Message message)
         {
-            Message responseMessage = new Message(Server.MessageHistory, message.ReceiverID);
+            Message responseMessage = new Message() {messageType = MessageType.History, 
+                MessageHistory = Server.MessageHistory};
             Server.SendMessage(responseMessage, socketClientHandler);
         }
 
@@ -143,7 +140,6 @@ namespace Server
         public void ReceiveMessages()
         {
             byte[] data = new byte[1024];
-      //      StringBuilder receivedData = new StringBuilder();
             int amount;
             do
             {

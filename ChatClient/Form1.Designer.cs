@@ -40,7 +40,6 @@
             this.tbName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lbParticipants = new System.Windows.Forms.ListBox();
-            this.tbChatContent = new System.Windows.Forms.RichTextBox();
             this.btGetAddress = new System.Windows.Forms.Button();
             this.lbCurrentDialog = new System.Windows.Forms.Label();
             this.btGetHistory = new System.Windows.Forms.Button();
@@ -49,6 +48,8 @@
             this.btAdd = new System.Windows.Forms.Button();
             this.btRemove = new System.Windows.Forms.Button();
             this.LoadFile = new System.Windows.Forms.OpenFileDialog();
+            this.lbChatContent = new System.Windows.Forms.ListBox();
+            this.btShowFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbMessageContent
@@ -114,7 +115,7 @@
             // cbIsConnected
             // 
             this.cbIsConnected.AutoSize = true;
-            this.cbIsConnected.Location = new System.Drawing.Point(660, 403);
+            this.cbIsConnected.Location = new System.Drawing.Point(592, 402);
             this.cbIsConnected.Name = "cbIsConnected";
             this.cbIsConnected.Size = new System.Drawing.Size(110, 21);
             this.cbIsConnected.TabIndex = 7;
@@ -141,7 +142,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(647, 43);
+            this.label3.Location = new System.Drawing.Point(579, 42);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 17);
             this.label3.TabIndex = 11;
@@ -151,19 +152,11 @@
             // 
             this.lbParticipants.FormattingEnabled = true;
             this.lbParticipants.ItemHeight = 16;
-            this.lbParticipants.Location = new System.Drawing.Point(626, 87);
+            this.lbParticipants.Location = new System.Drawing.Point(558, 86);
             this.lbParticipants.Name = "lbParticipants";
             this.lbParticipants.Size = new System.Drawing.Size(120, 132);
             this.lbParticipants.TabIndex = 13;
             this.lbParticipants.SelectedIndexChanged += new System.EventHandler(this.lbParticipants_SelectedIndexChanged);
-            // 
-            // tbChatContent
-            // 
-            this.tbChatContent.Location = new System.Drawing.Point(95, 201);
-            this.tbChatContent.Name = "tbChatContent";
-            this.tbChatContent.Size = new System.Drawing.Size(256, 132);
-            this.tbChatContent.TabIndex = 14;
-            this.tbChatContent.Text = "";
             // 
             // btGetAddress
             // 
@@ -178,7 +171,7 @@
             // lbCurrentDialog
             // 
             this.lbCurrentDialog.AutoSize = true;
-            this.lbCurrentDialog.Location = new System.Drawing.Point(171, 171);
+            this.lbCurrentDialog.Location = new System.Drawing.Point(171, 167);
             this.lbCurrentDialog.Name = "lbCurrentDialog";
             this.lbCurrentDialog.Size = new System.Drawing.Size(100, 17);
             this.lbCurrentDialog.TabIndex = 17;
@@ -186,7 +179,7 @@
             // 
             // btGetHistory
             // 
-            this.btGetHistory.Location = new System.Drawing.Point(650, 237);
+            this.btGetHistory.Location = new System.Drawing.Point(582, 236);
             this.btGetHistory.Name = "btGetHistory";
             this.btGetHistory.Size = new System.Drawing.Size(75, 49);
             this.btGetHistory.TabIndex = 18;
@@ -199,9 +192,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(92, 377);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 17);
+            this.label4.Size = new System.Drawing.Size(108, 17);
             this.label4.TabIndex = 19;
-            this.label4.Text = "Loaded files";
+            this.label4.Text = "Attachment files";
             // 
             // lbFiles
             // 
@@ -235,11 +228,34 @@
             // 
             this.LoadFile.FileName = "openFileDialog1";
             // 
+            // lbChatContent
+            // 
+            this.lbChatContent.FormattingEnabled = true;
+            this.lbChatContent.ItemHeight = 16;
+            this.lbChatContent.Location = new System.Drawing.Point(97, 186);
+            this.lbChatContent.Name = "lbChatContent";
+            this.lbChatContent.Size = new System.Drawing.Size(254, 148);
+            this.lbChatContent.TabIndex = 23;
+            this.lbChatContent.SelectedIndexChanged += new System.EventHandler(this.lbChatContent_SelectedIndexChanged);
+            // 
+            // btShowFiles
+            // 
+            this.btShowFiles.Location = new System.Drawing.Point(357, 186);
+            this.btShowFiles.Name = "btShowFiles";
+            this.btShowFiles.Size = new System.Drawing.Size(91, 40);
+            this.btShowFiles.TabIndex = 24;
+            this.btShowFiles.Text = "Show files";
+            this.btShowFiles.UseVisualStyleBackColor = true;
+            this.btShowFiles.Visible = false;
+            this.btShowFiles.Click += new System.EventHandler(this.btShowFiles_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 491);
+            this.ClientSize = new System.Drawing.Size(727, 496);
+            this.Controls.Add(this.btShowFiles);
+            this.Controls.Add(this.lbChatContent);
             this.Controls.Add(this.btRemove);
             this.Controls.Add(this.btAdd);
             this.Controls.Add(this.lbFiles);
@@ -247,7 +263,6 @@
             this.Controls.Add(this.btGetHistory);
             this.Controls.Add(this.lbCurrentDialog);
             this.Controls.Add(this.btGetAddress);
-            this.Controls.Add(this.tbChatContent);
             this.Controls.Add(this.lbParticipants);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbName);
@@ -283,7 +298,6 @@
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ListBox lbParticipants;
-        private System.Windows.Forms.RichTextBox tbChatContent;
         private System.Windows.Forms.Button btGetAddress;
         private System.Windows.Forms.Label lbCurrentDialog;
         private System.Windows.Forms.Button btGetHistory;
@@ -292,6 +306,8 @@
         private System.Windows.Forms.Button btAdd;
         private System.Windows.Forms.Button btRemove;
         private System.Windows.Forms.OpenFileDialog LoadFile;
+        private System.Windows.Forms.ListBox lbChatContent;
+        private System.Windows.Forms.Button btShowFiles;
     }
 }
 

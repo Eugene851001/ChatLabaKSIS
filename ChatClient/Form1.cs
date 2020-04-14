@@ -45,12 +45,10 @@ namespace ChatClient
             switch(message.messageType)
             {
                 case MessageType.Regular:
-                    chatDialogsInfo[chatDialogId].AddMessage(message.Name + ": " 
-                        + message.Content + "\n" + message.Time + "\n" + message.IPAdress);
+                    chatDialogsInfo[chatDialogId].AddMessage(message);
                     break;
                 case MessageType.Private:
-                    chatDialogsInfo[message.SenderID].AddMessage( message.Content + "\n" + 
-                        message.Time + "\n" + message.IPAdress);
+                    chatDialogsInfo[message.SenderID].AddMessage(message);
                     break;
                 case MessageType.ClientsList:
                     {
@@ -89,8 +87,23 @@ namespace ChatClient
                 case MessageType.History:
                     chatDialogsInfo[message.ReceiverID].Messages = message.MessageHistory;
                     break;
+                default:
+                    return;
             }
             UpdateView();
+        }
+
+        string ShowMessageContent(Chat.Message message)
+        {
+            string visualMessage = (message.Name + ": " + message.Content);
+            if (message.FileNames != null)
+            {
+                foreach (var fileName in message.FileNames)
+                {
+                    visualMessage += "\n[FILE] " + fileName + "\n";
+                }
+            }
+            return visualMessage;
         }
 
         public void UpdateView()
@@ -105,14 +118,14 @@ namespace ChatClient
                 {
                     lbCurrentDialog.Text = chatDialogsInfo[CurrentDialogId].Name;
                 }
-                tbChatContent.Clear();
+                lbChatContent.Items.Clear();
                 if (chatDialogsInfo != null)
                 {
-                    string[] messages = new string[chatDialogsInfo[CurrentDialogId].Messages.Count];
-                    chatDialogsInfo[CurrentDialogId].Messages.CopyTo(messages);
-                    foreach (string messageContent in messages)
+                   // string[] messages = new string[chatDialogsInfo[CurrentDialogId].Messages.Count];
+                    //chatDialogsInfo[CurrentDialogId].Messages.CopyTo(messages);
+                    foreach (Chat.Message message in chatDialogsInfo[CurrentDialogId].Messages)
                     {
-                        tbChatContent.Text += messageContent + "\r\n";
+                        lbChatContent.Items.Add(ShowMessageContent(message));
                     }
                 }
                 lbParticipants.Items.Clear();
@@ -152,7 +165,8 @@ namespace ChatClient
                 {
                     message = new Chat.Message(clientsList[selectedIndex].Key, tbMessageContent.Text);
                     message.FileNames = new List<string>(fileNames);
-                    chatDialogsInfo[message.ReceiverID].Messages.Add("Me: " + message.Content);
+                    message.Name = "Me";
+                    chatDialogsInfo[message.ReceiverID].Messages.Add(message);
                 }
                 if (cbIsConnected.Checked)
                 {
@@ -214,7 +228,7 @@ namespace ChatClient
         private void btGetHistory_Click(object sender, EventArgs e)
         {
             lbParticipants.SelectedIndex = 0;
-            Chat.Message message = new Chat.Message(new List<string>(), clientsList[selectedIndex].Key);
+            Chat.Message message = new Chat.Message() {messageType = MessageType.History, ReceiverID = clientsList[selectedIndex].Key};
             client.SendMessage(message);
             UpdateView();
         }
@@ -230,12 +244,48 @@ namespace ChatClient
             if (LoadFile.ShowDialog() == DialogResult.OK)
             {
                 string fileName = LoadFile.FileName;
-                Task t = LoadFileContent(fileName);
-                tbChatContent.Text += "Hello";
-                await t;
-                fileNames.Add(Path.GetFileName(fileName));
-                UpdateView();
+                bool result = true;
+                try
+                {
+                    Task t = LoadFileContent(fileName);
+                    await t;
+                }
+                catch
+                {
+                    MessageBox.Show("The file server is unavaible now", "Bad news", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (result)
+                {
+                    fileNames.Add(Path.GetFileName(fileName));
+                    UpdateView();
+                }
             }
+        }
+
+
+        bool CheckMessageForFiles(int index)
+        {
+            bool result = false;
+            Chat.Message message = chatDialogsInfo[CurrentDialogId].Messages[index];
+            if (message.FileNames != null && message.FileNames.Count > 0)
+                result = true;
+            return result;
+        }
+        private void lbChatContent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(lbChatContent.SelectedIndex != - 1 && CheckMessageForFiles(lbChatContent.SelectedIndex))
+            {
+                new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[lbChatContent.SelectedIndex].
+                    FileNames, httpPort).ShowDialog();
+            }
+        }
+
+        private void btShowFiles_Click(object sender, EventArgs e)
+        {
+            new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[selectedIndex].
+                FileNames, httpPort).ShowDialog();
         }
     }
 }
