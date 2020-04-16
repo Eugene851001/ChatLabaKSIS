@@ -31,6 +31,7 @@
             this.lbFiles = new System.Windows.Forms.ListBox();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.btSaveFile = new System.Windows.Forms.Button();
+            this.btFileInfo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lbFiles
@@ -52,11 +53,22 @@
             this.btSaveFile.UseVisualStyleBackColor = true;
             this.btSaveFile.Click += new System.EventHandler(this.btSaveFile_Click);
             // 
+            // btFileInfo
+            // 
+            this.btFileInfo.Location = new System.Drawing.Point(184, 334);
+            this.btFileInfo.Name = "btFileInfo";
+            this.btFileInfo.Size = new System.Drawing.Size(98, 39);
+            this.btFileInfo.TabIndex = 2;
+            this.btFileInfo.Text = "File info";
+            this.btFileInfo.UseVisualStyleBackColor = true;
+            this.btFileInfo.Click += new System.EventHandler(this.btFileInfo_Click);
+            // 
             // frmShowFiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(335, 395);
+            this.Controls.Add(this.btFileInfo);
             this.Controls.Add(this.btSaveFile);
             this.Controls.Add(this.lbFiles);
             this.Name = "frmShowFiles";
@@ -71,5 +83,6 @@
         private System.Windows.Forms.ListBox lbFiles;
         private System.Windows.Forms.SaveFileDialog SaveFile;
         private System.Windows.Forms.Button btSaveFile;
+        private System.Windows.Forms.Button btFileInfo;
     }
 }

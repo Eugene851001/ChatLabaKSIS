@@ -22,6 +22,12 @@ namespace Chat
             client = new Client();
         }
 
+        void ShowFileNotFound(string fileName)
+        {
+            MessageBox.Show("The file " + fileName + " is not found", "Error",
+                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         public frmShowFiles(List<string> filesNames, int port)
         {
             InitializeComponent();
@@ -38,7 +44,16 @@ namespace Chat
             if(lbFiles.SelectedIndex != -1)
             {
                 string fileName = (string)lbFiles.SelectedItem;
-                byte[] buffer = await client.GetResource("http://localhost:" + port.ToString() + "/" + fileName);
+                byte[] buffer = null;
+                try
+                {
+                    buffer = await client.GetResource("http://localhost:" + port.ToString() + "/" + fileName);
+                }
+                catch(FileNotFoundException)
+                {
+                    ShowFileNotFound(fileName);
+                    return;
+                }
                 if(buffer != null)
                 {
                     if(SaveFile.ShowDialog() == DialogResult.OK)
@@ -70,5 +85,34 @@ namespace Chat
         {
 
         }
+
+        async private void btFileInfo_Click(object sender, EventArgs e)
+        {
+            if(lbFiles.SelectedIndex != -1)
+            {
+                string fileName = (string)lbFiles.SelectedItem;
+                Dictionary<string, string> result = null;
+                try
+                {
+                    result = await client.GetResourceInf("http://localhost:" +
+                        port.ToString() + "/" + (string)lbFiles.SelectedItem);
+                }
+                catch(FileNotFoundException)
+                {
+                    ShowFileNotFound(fileName);
+                }
+                if (result != null)
+                {
+                    MessageBox.Show("File name: " + result["name"] + "File size: " + result["size"], "File Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } 
+                else
+                {
+                    MessageBox.Show("No info", "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                }
+            }
+        }
+
     }
 }
+ 

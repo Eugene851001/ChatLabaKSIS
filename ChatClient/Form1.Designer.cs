@@ -50,6 +50,7 @@
             this.LoadFile = new System.Windows.Forms.OpenFileDialog();
             this.lbChatContent = new System.Windows.Forms.ListBox();
             this.btShowFiles = new System.Windows.Forms.Button();
+            this.btDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbMessageContent
@@ -202,7 +203,7 @@
             this.lbFiles.ItemHeight = 16;
             this.lbFiles.Location = new System.Drawing.Point(97, 403);
             this.lbFiles.Name = "lbFiles";
-            this.lbFiles.Size = new System.Drawing.Size(174, 84);
+            this.lbFiles.Size = new System.Drawing.Size(174, 100);
             this.lbFiles.TabIndex = 20;
             // 
             // btAdd
@@ -223,6 +224,7 @@
             this.btRemove.TabIndex = 22;
             this.btRemove.Text = "Remove";
             this.btRemove.UseVisualStyleBackColor = true;
+            this.btRemove.Click += new System.EventHandler(this.btRemove_Click);
             // 
             // LoadFile
             // 
@@ -230,12 +232,15 @@
             // 
             // lbChatContent
             // 
+            this.lbChatContent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.lbChatContent.FormattingEnabled = true;
             this.lbChatContent.ItemHeight = 16;
             this.lbChatContent.Location = new System.Drawing.Point(97, 186);
             this.lbChatContent.Name = "lbChatContent";
             this.lbChatContent.Size = new System.Drawing.Size(254, 148);
             this.lbChatContent.TabIndex = 23;
+            this.lbChatContent.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbChatContent_DrawItem);
+            this.lbChatContent.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.lbChatContent_MeasureItem);
             this.lbChatContent.SelectedIndexChanged += new System.EventHandler(this.lbChatContent_SelectedIndexChanged);
             // 
             // btShowFiles
@@ -249,11 +254,22 @@
             this.btShowFiles.Visible = false;
             this.btShowFiles.Click += new System.EventHandler(this.btShowFiles_Click);
             // 
+            // btDelete
+            // 
+            this.btDelete.Location = new System.Drawing.Point(277, 479);
+            this.btDelete.Name = "btDelete";
+            this.btDelete.Size = new System.Drawing.Size(75, 24);
+            this.btDelete.TabIndex = 25;
+            this.btDelete.Text = "Delete";
+            this.btDelete.UseVisualStyleBackColor = true;
+            this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 496);
+            this.ClientSize = new System.Drawing.Size(727, 513);
+            this.Controls.Add(this.btDelete);
             this.Controls.Add(this.btShowFiles);
             this.Controls.Add(this.lbChatContent);
             this.Controls.Add(this.btRemove);
@@ -308,6 +324,7 @@
         private System.Windows.Forms.OpenFileDialog LoadFile;
         private System.Windows.Forms.ListBox lbChatContent;
         private System.Windows.Forms.Button btShowFiles;
+        private System.Windows.Forms.Button btDelete;
     }
 }
 
