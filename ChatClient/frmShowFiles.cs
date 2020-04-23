@@ -16,6 +16,8 @@ namespace Chat
     {
         Client client;
         int port;
+        List<string> fileNames = new List<string>();
+        List<int> filesID;
         public frmShowFiles()
         {
             InitializeComponent();
@@ -28,35 +30,34 @@ namespace Chat
                        MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public frmShowFiles(List<string> filesNames, int port)
+        public frmShowFiles(List<int> filesID, int port)
         {
             InitializeComponent();
             this.port = port;
+            this.filesID = filesID;
             client = new Client();
-            foreach(string fileName in filesNames)
-            {
-                lbFiles.Items.Add(fileName);
-            }
         }
 
         private async void btSaveFile_Click(object sender, EventArgs e)
         {
-            if(lbFiles.SelectedIndex != -1)
+            if (lbFiles.SelectedIndex != -1)
             {
-                string fileName = (string)lbFiles.SelectedItem;
+                int fileID = filesID[lbFiles.SelectedIndex];
                 byte[] buffer = null;
                 try
                 {
-                    buffer = await client.GetResource("http://localhost:" + port.ToString() + "/" + fileName);
+                    buffer = await client.GetResource("http://localhost:" + port.ToString() 
+                        + "/" + fileID.ToString());
                 }
-                catch(FileNotFoundException)
+                catch (FileNotFoundException)
                 {
-                    ShowFileNotFound(fileName);
+                    ShowFileNotFound(fileID.ToString());
                     return;
                 }
-                if(buffer != null)
+                string fileName;
+                if (buffer != null)
                 {
-                    if(SaveFile.ShowDialog() == DialogResult.OK)
+                    if (SaveFile.ShowDialog() == DialogResult.OK)
                     {
                         fileName = SaveFile.FileName;
                         FileStream fout;
@@ -81,35 +82,23 @@ namespace Chat
             }
         }
 
-        private void frmShowFiles_Load(object sender, EventArgs e)
+        private async void frmShowFiles_Load(object sender, EventArgs e)
         {
-
+            Dictionary<string, string> fileInfo = null;
+            foreach (int fileID in filesID)
+            {
+                fileInfo = await client.GetResourceInf("http://localhost:" +
+                    port.ToString() + "/ " + fileID.ToString());
+                fileNames.Add(fileInfo["name"]);
+            }
+            updateView();
         }
 
-        async private void btFileInfo_Click(object sender, EventArgs e)
+        void updateView()
         {
-            if(lbFiles.SelectedIndex != -1)
+            foreach(string fileName in fileNames)
             {
-                string fileName = (string)lbFiles.SelectedItem;
-                Dictionary<string, string> result = null;
-                try
-                {
-                    result = await client.GetResourceInf("http://localhost:" +
-                        port.ToString() + "/" + (string)lbFiles.SelectedItem);
-                }
-                catch(FileNotFoundException)
-                {
-                    ShowFileNotFound(fileName);
-                }
-                if (result != null)
-                {
-                    MessageBox.Show("File name: " + result["name"] + "File size: " + result["size"], "File Info",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                } 
-                else
-                {
-                    MessageBox.Show("No info", "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                }
+                lbFiles.Items.Add(fileName);
             }
         }
 

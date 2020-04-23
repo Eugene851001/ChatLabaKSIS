@@ -19,26 +19,29 @@ namespace ChatClient
     {
         const int chatDialogId = 0;
         const int httpPort = 8009;
-        const long MaxFileSize = long.MaxValue;
+        const long MaxFileSize = 1024 * 1024 * 50;
+        const long MaxFileTotalSize = 1024 * 1024 * 500;
+
+        long  FileTotalSizeCounter = 0;
 
         ClientHttp.Client clientHttp;
         Client client;
         Dictionary<int, ChatDialogInfo> chatDialogsInfo;
         List<EndPointNamePair> clientsList;
-        List<string> fileNames;
+      //  List<string> fileNames;
         int CurrentDialogId = chatDialogId;
         int selectedIndex = 0;
 
       
         bool IsLoadingFiles = false;
         List<string> unacceptableExtension = new List<string>() { ".exe", ".dll" };
+        Dictionary<int, string> loadedFiles = new Dictionary<int, string>();
 
         public frmMain()
         {
             InitializeComponent();
             clientsList = new List<EndPointNamePair>();
             clientsList.Add(new EndPointNamePair() { Key = chatDialogId, Value = "Chat" });
-            fileNames = new List<string>();
             chatDialogsInfo = new Dictionary<int, ChatDialogInfo>();
             chatDialogsInfo.Add(chatDialogId, new ChatDialogInfo("Chat"));
             client = new Client();
@@ -102,11 +105,11 @@ namespace ChatClient
         string ShowMessageContent(Chat.Message message)
         {
             string visualMessage = (message.Name + ": " + message.Content);
-            if (message.FileNames != null)
+            if (message.FilesID != null)
             {
-                foreach (var fileName in message.FileNames)
+                foreach (int fileName in message.FilesID)
                 {
-                    visualMessage += "\n[FILE] " + fileName + "\n";
+                    visualMessage += "\n[FILE] " + fileName.ToString();
                 }
             }
             return visualMessage;
@@ -127,8 +130,6 @@ namespace ChatClient
                 lbChatContent.Items.Clear();
                 if (chatDialogsInfo != null)
                 {
-                    // string[] messages = new string[chatDialogsInfo[CurrentDialogId].Messages.Count];
-                    //chatDialogsInfo[CurrentDialogId].Messages.CopyTo(messages);
                     List<Chat.Message> messages = new List<Chat.Message>(chatDialogsInfo[CurrentDialogId].Messages);
                     foreach (Chat.Message message in messages)
                     {
@@ -142,7 +143,7 @@ namespace ChatClient
                         chatDialogsInfo[clientName.Key].UnreadMessageCounter.ToString() : ""));
                 }
                 lbFiles.Items.Clear();
-                foreach(string fileName in fileNames)
+                foreach(KeyValuePair<int, string> fileName in loadedFiles)
                 {
                     lbFiles.Items.Add(fileName);
                 }
@@ -166,12 +167,12 @@ namespace ChatClient
                 if (CurrentDialogId == chatDialogId)
                 {
                     message = new Chat.Message(tbMessageContent.Text);
-                    message.FileNames = new List<string>(fileNames);
+                    message.FilesID = new List<int>(loadedFiles.Keys.AsEnumerable());
                 }
                 else
                 {
                     message = new Chat.Message(clientsList[selectedIndex].Key, tbMessageContent.Text);
-                    message.FileNames = new List<string>(fileNames);
+                    message.FilesID = new List<int>(loadedFiles.Keys.AsEnumerable());
                     message.Name = "Me";
                     chatDialogsInfo[message.ReceiverID].Messages.Add(message);
                 }
@@ -185,16 +186,12 @@ namespace ChatClient
                     else
                     {
                         client.SendMessage(message);
+                        loadedFiles.Clear();
                         UpdateView();
                     }
                 }
             }
         }
-
-     //   void lst_MeasureItem(object sender, MeasureItemEventArgs e)
-       /// {
-          //  e.ItemHeight = (int)e.Graphics.MeasureString(listBox1.Items[e.Index].ToString(), listBox1.Font, listBox1.Width).Height;
-       // }
 
         private void lst_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -250,21 +247,68 @@ namespace ChatClient
             UpdateView();
         }
 
-        async Task<bool> LoadFileContent(string fileName, long MaxSize)
+        byte[] getFileContent(string fileName)
         {
-            bool result = true;
-            IsLoadingFiles = true;
-            HttpContent fileContent = clientHttp.LoadFile(fileName);
-            byte[] buffer = await fileContent.ReadAsByteArrayAsync();
-            if (buffer.Length <= MaxSize)
+            FileStream fin;
+            try
             {
-                await clientHttp.PostResource("http://localhost:" + httpPort.ToString(), clientHttp.LoadFile(fileName));
+                fin = new FileStream(fileName, FileMode.Open);
+            }
+            catch
+            {
+                return null;
+            }
+            int length = (int)fin.Length;
+            byte[] buffer = new byte[length];
+            try
+            {
+                fin.Read(buffer, 0, length);
+            }
+            catch
+            {
+                buffer = null;
+            }
+            finally
+            {
+                fin.Close();
+            }
+            return buffer;
+        }
+
+        async Task<int> LoadFileContent(string fileName, long MaxSize)
+        {
+            int result;
+            IsLoadingFiles = true;
+            byte[] bufferFileContent = getFileContent(fileName);
+            long length = bufferFileContent.Length;
+            long totalSize = FileTotalSizeCounter + length;
+            if (length > MaxSize)
+            {
+                MessageBox.Show("The file size is " + length + ", but it should be less then"
+                  + MaxFileSize.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                result = -1;
+            }
+            else if (totalSize > MaxFileTotalSize)
+            {
+                MessageBox.Show("The tota files size size is " + totalSize + ", but it should be less then"
+                  + MaxFileSize.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                result = -1;
             }
             else
             {
-                MessageBox.Show("The file size is " + buffer.Length + ", but should be less then" 
-                    + MaxFileSize.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                result = false;
+                FileTotalSizeCounter = totalSize;
+                HttpContent fileContent = new ByteArrayContent(bufferFileContent);
+                int tryCounter = 0;
+                string fileExtension = Path.GetExtension(fileName);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                result = -1;
+                while (result == -1)
+                {
+                    result = await clientHttp.PostResource("http://localhost:" + httpPort.ToString()
+                        + "/" + fileName, fileContent);
+                    fileName = fileNameWithoutExtension + "(" + tryCounter.ToString() + ")" + fileExtension;
+                    tryCounter++;
+                }
             }
             IsLoadingFiles = false;
             return result;
@@ -283,25 +327,30 @@ namespace ChatClient
                 string fileName = LoadFile.FileName;
                 if(!isAcceptableExtension(fileName))
                 {
-                    MessageBox.Show("The downloaded file cannot be executable", "Error", 
+                    MessageBox.Show("The downloaded file can not be executable", "Error", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }   
-                bool result = true;
+                int result;
                 try
                 {
-                    Task<bool> t = LoadFileContent(fileName, MaxFileSize);
+                    Task<int> t = LoadFileContent(fileName, MaxFileSize);
                     result = await t;
+                    if(result == -1)
+                    {
+                        MessageBox.Show("File upload failed", "Error", MessageBoxButtons.OK, 
+                            MessageBoxIcon.Error);
+                    }
                 }
                 catch
                 {
                     MessageBox.Show("The file server is unavaible now", "Bad news", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    result = false;
+                    result = -1;
                 }
-                if (result)
+                if (result != - 1)
                 {
-                    fileNames.Add(Path.GetFileName(fileName));
+                    loadedFiles.Add(result, Path.GetFileName(fileName));
                     UpdateView();
                 }
             }
@@ -311,23 +360,24 @@ namespace ChatClient
         {
             bool result = false;
             Chat.Message message = chatDialogsInfo[CurrentDialogId].Messages[index];
-            if (message.FileNames != null && message.FileNames.Count > 0)
+            if (message.FilesID != null && message.FilesID.Count > 0)
                 result = true;
             return result;
         }
+
         private void lbChatContent_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(lbChatContent.SelectedIndex != - 1 && CheckMessageForFiles(lbChatContent.SelectedIndex))
             {
                 new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[lbChatContent.SelectedIndex].
-                    FileNames, httpPort).ShowDialog();
+                    FilesID, httpPort).ShowDialog();
             }
         }
 
         private void btShowFiles_Click(object sender, EventArgs e)
         {
             new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[selectedIndex].
-                FileNames, httpPort).ShowDialog();
+                FilesID, httpPort).ShowDialog();
         }
 
         private void lbChatContent_MeasureItem(object sender, MeasureItemEventArgs e)
@@ -346,25 +396,21 @@ namespace ChatClient
             }
         }
 
-        private void btRemove_Click(object sender, EventArgs e)
-        {
-            if(lbFiles.SelectedIndex != -1)
-            {
-                fileNames.RemoveAt(lbFiles.SelectedIndex);
-                UpdateView();
-            }
-        }
-
         private async void btDelete_Click(object sender, EventArgs e)
         {
             if(lbFiles.SelectedIndex != -1)
             {
-                string fileName = (string)lbFiles.SelectedItem;
+                int fileID = ((KeyValuePair<int, string>)lbFiles.SelectedItem).Key;
+                string fileName = ((KeyValuePair<int, string>)lbFiles.SelectedItem).Value;
                 try
                 {
-                    await clientHttp.DeleteResource("http://localhost:" + httpPort.ToString() + "/" + fileName);
+                    await clientHttp.DeleteResource("http://localhost:" + 
+                        httpPort.ToString() + "/" + fileID.ToString());
                     MessageBox.Show("The file " + fileName + " has been deleted", "Success", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    loadedFiles.Remove(((KeyValuePair<int, string>)lbFiles.SelectedItem).Key);
+                    UpdateView();
+
                 }
                 catch(FileNotFoundException)
                 {

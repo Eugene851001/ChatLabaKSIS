@@ -9,56 +9,13 @@ namespace ClientHttp
 {
     public class Client
     {
+
         HttpClient client;
 
         public Client()
         {
             client = new HttpClient();
         }
-
-        string GetBaseName(string fileName)
-        {
-            return Path.GetFileName(fileName);
-        }
-        public HttpContent LoadFile(string fileName, long MaxFileSize = long.MaxValue)
-        {
-            ByteArrayContent content = null;
-            FileStream fin;
-            try
-            {
-                fin = new FileStream(fileName, FileMode.Open);
-            }
-            catch
-            {
-                return null;
-            }
-            int length = (int)fin.Length;
-            fileName = GetBaseName(fileName);
-            byte[] buffer = new byte[length + fileName.Length + 1];
-            Encoding.ASCII.GetBytes(fileName).CopyTo(buffer, 0);
-            buffer[fileName.Length] = 0;
-            try
-            {
-                fin.Read(buffer, fileName.Length + 1, length);
-                content = new ByteArrayContent(buffer);
-            }
-            catch
-            {
-                content = null;
-            }
-            finally
-            {
-                fin.Close();
-            }
-            return content;
-        }
-
-        public HttpContent GetContent(string source)
-        {
-            StringContent httpContent = new StringContent(source);
-            return httpContent;
-        }
-
 
         async public Task DeleteResource(string uri)
         {
@@ -69,9 +26,20 @@ namespace ClientHttp
             }
         }
 
-        async public Task PostResource(string uri, HttpContent content)
+        async public Task<int> PostResource(string fileName, HttpContent content)
         {
-           HttpResponseMessage response = await client.PostAsync(uri, content);
+            int result;
+            HttpResponseMessage response = await client.PostAsync(fileName, content);
+            try
+            {
+                string fileID = await response.Content.ReadAsStringAsync();
+                result = int.Parse(fileID);
+            }
+            catch
+            {
+                result = -1;
+            }
+            return result;
         }
 
         async public Task<Dictionary<string, string>> GetResourceInf(string uri)
@@ -89,13 +57,14 @@ namespace ClientHttp
             }
             else
                 if (response.StatusCode == HttpStatusCode.NotFound)
-                    throw new FileNotFoundException();    
+                    throw new FileNotFoundException();   
             return result;
         }
          
         async public Task<byte[]> GetResource(string uri)
         {
-            byte[] result = null;
+            byte[] result = null; 
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
             HttpResponseMessage response = await client.GetAsync(uri);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -105,9 +74,9 @@ namespace ClientHttp
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    throw new FileNotFoundException();
+                    result = null;
+                    //throw new FileNotFoundException();
                 }
-               
             }
             return result;
         }

@@ -46,7 +46,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lbFiles = new System.Windows.Forms.ListBox();
             this.btAdd = new System.Windows.Forms.Button();
-            this.btRemove = new System.Windows.Forms.Button();
             this.LoadFile = new System.Windows.Forms.OpenFileDialog();
             this.lbChatContent = new System.Windows.Forms.ListBox();
             this.btShowFiles = new System.Windows.Forms.Button();
@@ -216,16 +215,6 @@
             this.btAdd.UseVisualStyleBackColor = true;
             this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
             // 
-            // btRemove
-            // 
-            this.btRemove.Location = new System.Drawing.Point(276, 441);
-            this.btRemove.Name = "btRemove";
-            this.btRemove.Size = new System.Drawing.Size(75, 23);
-            this.btRemove.TabIndex = 22;
-            this.btRemove.Text = "Remove";
-            this.btRemove.UseVisualStyleBackColor = true;
-            this.btRemove.Click += new System.EventHandler(this.btRemove_Click);
-            // 
             // LoadFile
             // 
             this.LoadFile.FileName = "openFileDialog1";
@@ -256,7 +245,7 @@
             // 
             // btDelete
             // 
-            this.btDelete.Location = new System.Drawing.Point(277, 479);
+            this.btDelete.Location = new System.Drawing.Point(276, 465);
             this.btDelete.Name = "btDelete";
             this.btDelete.Size = new System.Drawing.Size(75, 24);
             this.btDelete.TabIndex = 25;
@@ -272,7 +261,6 @@
             this.Controls.Add(this.btDelete);
             this.Controls.Add(this.btShowFiles);
             this.Controls.Add(this.lbChatContent);
-            this.Controls.Add(this.btRemove);
             this.Controls.Add(this.btAdd);
             this.Controls.Add(this.lbFiles);
             this.Controls.Add(this.label4);
@@ -320,7 +308,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox lbFiles;
         private System.Windows.Forms.Button btAdd;
-        private System.Windows.Forms.Button btRemove;
         private System.Windows.Forms.OpenFileDialog LoadFile;
         private System.Windows.Forms.ListBox lbChatContent;
         private System.Windows.Forms.Button btShowFiles;

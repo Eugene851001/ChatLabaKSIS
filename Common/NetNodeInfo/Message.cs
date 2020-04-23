@@ -22,7 +22,7 @@ namespace Chat
 
     public class Message
     {
-        public string Content;
+        public string Content { get; set;}
         public string Name;
         public MessageType messageType;
         public List<EndPointNamePair> clientsNames;
@@ -33,7 +33,7 @@ namespace Chat
         public int Hash;
         public List<Message> MessageHistory;
         public DateTime Time;
-        public List<string> FileNames;
+        public List<int> FilesID;
 
         public Message(int receiver, string content)
         {
