@@ -16,6 +16,7 @@ namespace Chat
     {
         Client client;
         int port;
+        string httpServerIP;
         List<string> fileNames = new List<string>();
         List<int> filesID;
         public frmShowFiles()
@@ -30,7 +31,7 @@ namespace Chat
                        MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public frmShowFiles(List<int> filesID, int port)
+        public frmShowFiles(List<int> filesID, int port, string httpServerIP)
         {
             InitializeComponent();
             this.port = port;
@@ -46,7 +47,7 @@ namespace Chat
                 byte[] buffer = null;
                 try
                 {
-                    buffer = await client.GetResource("http://localhost:" + port.ToString() 
+                    buffer = await client.GetResource("http://" + httpServerIP + ":" + port.ToString() 
                         + "/" + fileID.ToString());
                 }
                 catch (FileNotFoundException)
@@ -87,7 +88,7 @@ namespace Chat
             Dictionary<string, string> fileInfo = null;
             foreach (int fileID in filesID)
             {
-                fileInfo = await client.GetResourceInf("http://localhost:" +
+                fileInfo = await client.GetResourceInf("http://" + httpServerIP + ":" +
                     port.ToString() + "/ " + fileID.ToString());
                 fileNames.Add(fileInfo["name"]);
             }

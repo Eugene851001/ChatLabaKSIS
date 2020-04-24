@@ -107,7 +107,7 @@ namespace ServerHttp
             return id;
         }
 
-        private void deleteFileFromList(int fileID)
+        void deleteFileFromList(int fileID)
         {
             if (!IsExistsFile(fileID))
                 throw new FileNotFoundException();
@@ -118,6 +118,21 @@ namespace ServerHttp
                     requiredFileInfo = fileInfo;
             }
             filesInfo.Remove(requiredFileInfo);
+        }
+
+        public bool isFileStored(string storedFileName)
+        {
+            foreach(var fileInfo in filesInfo)
+            {
+                if (fileInfo.StoredFileName.Equals(storedFileName))
+                    return true;
+            }
+            return false;
+        }
+
+        void addFileToList(FileInfo fileInfo)
+        {
+            filesInfo.Add(fileInfo);
         }
 
         #endregion
@@ -153,7 +168,7 @@ namespace ServerHttp
                     fileHash += bufferID[i].ToString("x2");
                 }
                 createFile(fileHash, content);
-                filesInfo.Add(new FileInfo() { UserFileName = name, FileID = currentFileID++,  
+                addFileToList(new FileInfo() { UserFileName = name, FileID = currentFileID++,  
                     StoredFileName = fileHash });
                 id = GetFileID(name);
 
@@ -165,8 +180,10 @@ namespace ServerHttp
         {
             if(IsExistsFile(fileID))
             {
-                File.Delete(savePath + "/" + GetStorageFileName(fileID));
                 deleteFileFromList(fileID);
+                string storedFileName = GetStorageFileName(fileID);
+                if (!isFileStored(storedFileName))
+                    File.Delete(savePath + "/" + storedFileName); 
             }
             else
             {

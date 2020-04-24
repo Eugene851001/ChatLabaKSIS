@@ -11,6 +11,7 @@ using System.Net;
 using Chat;
 using System.Threading;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 
 namespace ChatClient
@@ -21,6 +22,7 @@ namespace ChatClient
         const int httpPort = 8009;
         const long MaxFileSize = 1024 * 1024 * 50;
         const long MaxFileTotalSize = 1024 * 1024 * 500;
+        const string httpServerIP = "localhost";
 
         long  FileTotalSizeCounter = 0;
 
@@ -166,7 +168,8 @@ namespace ChatClient
                 Chat.Message message;
                 if (CurrentDialogId == chatDialogId)
                 {
-                    message = new Chat.Message(tbMessageContent.Text);
+                    message = new Chat.Message();
+                    message.Content = tbMessageContent.Text;
                     message.FilesID = new List<int>(loadedFiles.Keys.AsEnumerable());
                 }
                 else
@@ -242,7 +245,8 @@ namespace ChatClient
         private void btGetHistory_Click(object sender, EventArgs e)
         {
             lbParticipants.SelectedIndex = 0;
-            Chat.Message message = new Chat.Message() {messageType = MessageType.History, ReceiverID = clientsList[selectedIndex].Key};
+            Chat.Message message = new Chat.Message(){messageType = MessageType.History, 
+                ReceiverID = clientsList[selectedIndex].Key};
             client.SendMessage(message);
             UpdateView();
         }
@@ -298,13 +302,13 @@ namespace ChatClient
             {
                 FileTotalSizeCounter = totalSize;
                 HttpContent fileContent = new ByteArrayContent(bufferFileContent);
-                int tryCounter = 0;
+                int tryCounter = 1;
                 string fileExtension = Path.GetExtension(fileName);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                 result = -1;
                 while (result == -1)
                 {
-                    result = await clientHttp.PostResource("http://localhost:" + httpPort.ToString()
+                    result = await clientHttp.PostResource("http://"  + httpServerIP + ":" + httpPort.ToString()
                         + "/" + fileName, fileContent);
                     fileName = fileNameWithoutExtension + "(" + tryCounter.ToString() + ")" + fileExtension;
                     tryCounter++;
@@ -320,6 +324,21 @@ namespace ChatClient
             return !unacceptableExtension.Contains(extesnion);
         }
 
+       bool checkZipFilesExtension(string fileName)
+        {
+            bool result = true;
+            FileStream fin = new FileStream(fileName, FileMode.Open);
+            ZipArchive archive = new ZipArchive(fin);
+            foreach(ZipArchiveEntry entry in archive.Entries)
+            {
+                if (!isAcceptableExtension(entry.Name))
+                    result = false;
+                    
+            }
+            fin.Close();
+            return result;
+        }
+
         private async void btAdd_Click(object sender, EventArgs e)
         {
             if (LoadFile.ShowDialog() == DialogResult.OK)
@@ -327,16 +346,25 @@ namespace ChatClient
                 string fileName = LoadFile.FileName;
                 if(!isAcceptableExtension(fileName))
                 {
-                    MessageBox.Show("The downloaded file can not be executable", "Error", 
+                    MessageBox.Show("Invalid file extension", "Error", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }   
-                int result;
+                if(Path.GetExtension(fileName).Equals(".zip"))
+                {
+                    if(!checkZipFilesExtension(fileName))
+                    {
+                        MessageBox.Show("Invalid file extension is zip archive", "Error", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                    }
+                }
+                int fileID;
                 try
                 {
                     Task<int> t = LoadFileContent(fileName, MaxFileSize);
-                    result = await t;
-                    if(result == -1)
+                    fileID = await t;
+                    if(fileID == -1)
                     {
                         MessageBox.Show("File upload failed", "Error", MessageBoxButtons.OK, 
                             MessageBoxIcon.Error);
@@ -346,11 +374,11 @@ namespace ChatClient
                 {
                     MessageBox.Show("The file server is unavaible now", "Bad news", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    result = -1;
+                    fileID = -1;
                 }
-                if (result != - 1)
+                if (fileID != - 1)
                 {
-                    loadedFiles.Add(result, Path.GetFileName(fileName));
+                    loadedFiles.Add(fileID, Path.GetFileName(fileName));
                     UpdateView();
                 }
             }
@@ -370,14 +398,14 @@ namespace ChatClient
             if(lbChatContent.SelectedIndex != - 1 && CheckMessageForFiles(lbChatContent.SelectedIndex))
             {
                 new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[lbChatContent.SelectedIndex].
-                    FilesID, httpPort).ShowDialog();
+                    FilesID, httpPort, httpServerIP).ShowDialog();
             }
         }
 
         private void btShowFiles_Click(object sender, EventArgs e)
         {
             new frmShowFiles(chatDialogsInfo[CurrentDialogId].Messages[selectedIndex].
-                FilesID, httpPort).ShowDialog();
+                FilesID, httpPort, httpServerIP).ShowDialog();
         }
 
         private void lbChatContent_MeasureItem(object sender, MeasureItemEventArgs e)
@@ -404,7 +432,7 @@ namespace ChatClient
                 string fileName = ((KeyValuePair<int, string>)lbFiles.SelectedItem).Value;
                 try
                 {
-                    await clientHttp.DeleteResource("http://localhost:" + 
+                    await clientHttp.DeleteResource("http://" + httpServerIP + ":" + 
                         httpPort.ToString() + "/" + fileID.ToString());
                     MessageBox.Show("The file " + fileName + " has been deleted", "Success", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -7,7 +7,8 @@ using System.Net;
 
 namespace Chat
 {
-    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest, SearchResponse, History, CheckConnection};
+    public enum MessageType { Regular, Registration, ClientsList, Private, SearchRequest,
+        SearchResponse, History, CheckConnection};
 
     public struct EndPointNamePair
     {
@@ -23,17 +24,17 @@ namespace Chat
     public class Message
     {
         public string Content { get; set;}
-        public string Name;
-        public MessageType messageType;
-        public List<EndPointNamePair> clientsNames;
-        public int ReceiverID;
-        public int SenderID;
-        public string IPAdress;
-        public int Port;
-        public int Hash;
-        public List<Message> MessageHistory;
-        public DateTime Time;
-        public List<int> FilesID;
+        public string Name { get; set; }
+        public MessageType messageType { get; set;}
+        public List<EndPointNamePair> clientsNames { get; set;}
+        public int ReceiverID { get; set; }
+        public int SenderID { get; set; }
+        public string IPAdress { get; set; }
+        public int Port { get; set; }
+        public int Hash { get; set; }
+        public List<Message> MessageHistory { get; set; }
+        public DateTime Time { get; set; }
+        public List<int> FilesID { get; set; }
 
         public Message(int receiver, string content)
         {
@@ -48,29 +49,11 @@ namespace Chat
             MessageHistory = messageHistory;
             messageType = MessageType.History;
         }
-        public Message(MessageType messageType)
-        {
-            this.messageType = messageType;
-        }
 
         public Message(List<EndPointNamePair> clientsNames)
         {
             this.clientsNames = clientsNames;
             messageType = MessageType.ClientsList;
-        }
-
-        public Message(string IPAdress, int port, MessageType messageType)
-        {
-            this.messageType = messageType;
-            this.Port = port;
-            this.IPAdress = IPAdress;
-        }
-
-        public Message(string content)
-        {
-            messageType = MessageType.Regular;
-            Content = content;
-            Name = "Unknown";
         }
 
         public Message()

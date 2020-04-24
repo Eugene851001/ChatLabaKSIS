@@ -136,7 +136,8 @@ namespace ChatClient
 
         public void UdpBroadcastRequest()
         {
-            Message message = new Message(MessageType.SearchRequest);
+            Message message = new Message();
+            message.messageType = MessageType.SearchRequest;
             message.Port = ((IPEndPoint)socketUdpHandler.LocalEndPoint).Port;
             message.IPAdress = StandartInfo.GetCurrentIP().ToString();
             IPEndPoint IPendPoint = new IPEndPoint(IPAddress.Parse(BroadcastIP), ServerPort);
