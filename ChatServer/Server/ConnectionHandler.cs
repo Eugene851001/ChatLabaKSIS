@@ -42,7 +42,7 @@ namespace Server
 
         public void NotifyClientLeft()
         {
-            Server.SendToAll(new Message("has left the chat"));
+            Server.SendToAll(new Message() { Content = "has left the chat" });
             List<EndPointNamePair> info = GetClientsList();
             Server.SendToAll(new Message(info));
         }
@@ -57,7 +57,8 @@ namespace Server
             try
             {
 
-                socketClientHandler.Send(messageSerializer.Serialize(new Message(MessageType.CheckConnection)));
+                socketClientHandler.Send(messageSerializer.Serialize(new Message() { 
+                    messageType = MessageType.CheckConnection}));
                 if (!socketClientHandler.Connected)
                     IsConnected = false;
             }

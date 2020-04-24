@@ -27,7 +27,14 @@ namespace Server
         static Serializer messageSerializer = new Serializer();
        public static void HandleSearchMessage(Message message)
         {
-            Message messageResponse = new Message(StandartInfo.GetCurrentIP().ToString(), port, MessageType.SearchResponse);
+            Message messageResponse = new Message()
+            {
+                IPAdress = StandartInfo.GetCurrentIP().
+                ToString(),
+                Port = port,
+                messageType = MessageType.SearchResponse
+            };
+           //Message messageResponse = new Message(StandartInfo.GetCurrentIP().ToString(), port, MessageType.SearchResponse);
             Socket socketSetAdress = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(message.IPAdress), message.Port);
             socketSetAdress.SendTo(messageSerializer.Serialize(messageResponse), endPoint); 

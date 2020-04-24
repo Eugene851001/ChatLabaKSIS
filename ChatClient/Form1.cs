@@ -21,7 +21,7 @@ namespace ChatClient
         const int chatDialogId = 0;
         const int httpPort = 8009;
         const long MaxFileSize = 1024 * 1024 * 50;
-        const long MaxFileTotalSize = 1024 * 1024 * 500;
+        const long MaxFileTotalSize = 1024 * 1024 * 100;
         const string httpServerIP = "localhost";
 
         long  FileTotalSizeCounter = 0;
@@ -267,6 +267,7 @@ namespace ChatClient
             try
             {
                 fin.Read(buffer, 0, length);
+                byte test = buffer[buffer.Length - 1];
             }
             catch
             {
@@ -302,6 +303,8 @@ namespace ChatClient
             {
                 FileTotalSizeCounter = totalSize;
                 HttpContent fileContent = new ByteArrayContent(bufferFileContent);
+                byte[] test = await fileContent.ReadAsByteArrayAsync();
+                byte testByte = test[test.Length - 1];
                 int tryCounter = 1;
                 string fileExtension = Path.GetExtension(fileName);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);

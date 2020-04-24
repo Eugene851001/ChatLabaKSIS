@@ -17,6 +17,7 @@ namespace ServerHttp
         bool IsListening;
 
         FilesHandler filesHandler;
+        const string fileTableName = "filesTable.txt";
 
         delegate void RequestHandler(HttpListenerContext context);
 
@@ -25,8 +26,8 @@ namespace ServerHttp
         public Server(string path, int port)
         {
             filesHandler = new FilesHandler(new SerializerXml(), path);
-            if (File.Exists("filesTable.txt"))
-                filesHandler.LoadInfo("filesTable.txt");
+            if (File.Exists(fileTableName))
+                filesHandler.LoadInfo(fileTableName);
             requestHandlers = new Dictionary<string, RequestHandler>();
             requestHandlers.Add("GET", HandleGetRequest);
             requestHandlers.Add("POST", HandlePostRequest);
@@ -42,8 +43,13 @@ namespace ServerHttp
         void HandlePostRequest(HttpListenerContext context)
         {
             Stream input = context.Request.InputStream;
-            byte[] buffer = new byte[context.Request.ContentLength64];
-            input.Read(buffer, 0, (int)context.Request.ContentLength64);
+       /*     byte[] buffer = new byte[context.Request.ContentLength64];
+            input.Read(buffer, 0, (int)context.Request.ContentLength64);*/
+            StreamReader reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding);
+            string result = reader.ReadToEnd();
+            byte[] buffer;
+            buffer = context.Request.ContentEncoding.GetBytes(result);//Encoding.ASCII.GetBytes(result);
+            Console.WriteLine(buffer[buffer.Length - 1]);
             string fileName = Path.GetFileName(context.Request.Url.LocalPath);
             Console.WriteLine("Post file name: " + fileName);
             int id;
@@ -60,7 +66,7 @@ namespace ServerHttp
                 context.Response.OutputStream.Write(Encoding.ASCII.GetBytes(id.ToString()), 0, 
                     Encoding.ASCII.GetBytes(id.ToString()).Length);
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
-                filesHandler.SaveInfo("filesTable.txt");
+                filesHandler.SaveInfo(fileTableName);
             }
              context.Response.OutputStream.Close();
         }
@@ -71,13 +77,9 @@ namespace ServerHttp
         {
             context.Response.StatusCode = (int)HttpStatusCode.OK;
             
-            //     string path = savePath + Path.GetFileName(context.Request.Url.LocalPath);
-            int fileID = 0;
-            try
-            {
-                fileID = int.Parse(Path.GetFileName(context.Request.Url.LocalPath));
-            }
-            catch
+            int fileID;
+            fileID = getFileIDFromRequest(context);
+            if(fileID == -1)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.Response.OutputStream.Close();
@@ -139,7 +141,8 @@ namespace ServerHttp
             try
             {
                 filesHandler.DeleteFile(id);
-                filesHandler.SaveInfo("filesTable.txt");
+               // filesHandler.SaveInfo(fileTableName);
+                Console.WriteLine("File Deleted");
             }
             catch(FileNotFoundException)
             {
@@ -169,15 +172,8 @@ namespace ServerHttp
             IsListening = true;
             while (IsListening)
             { 
-                try
-                {
-                    HttpListenerContext context = listener.GetContext();
-                    HandleRequest(context);
-                }
-                catch
-                {
-
-                }
+                HttpListenerContext context = listener.GetContext();
+                HandleRequest(context);
             }
         }
     }

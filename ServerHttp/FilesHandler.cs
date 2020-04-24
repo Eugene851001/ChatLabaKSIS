@@ -144,10 +144,6 @@ namespace ServerHttp
             {
                 fout.Write(content, 0, content.Length);
             }
-            catch
-            {
-
-            }
             finally
             {
                 fout.Close();
@@ -180,8 +176,9 @@ namespace ServerHttp
         {
             if(IsExistsFile(fileID))
             {
-                deleteFileFromList(fileID);
                 string storedFileName = GetStorageFileName(fileID);
+                deleteFileFromList(fileID);
+                Console.WriteLine("Removed file from list");
                 if (!isFileStored(storedFileName))
                     File.Delete(savePath + "/" + storedFileName); 
             }

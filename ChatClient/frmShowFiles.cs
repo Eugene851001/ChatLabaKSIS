@@ -16,7 +16,7 @@ namespace Chat
     {
         Client client;
         int port;
-        string httpServerIP;
+        string httpServerIP = "localhost";
         List<string> fileNames = new List<string>();
         List<int> filesID;
         public frmShowFiles()
